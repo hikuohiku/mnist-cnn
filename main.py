@@ -16,13 +16,14 @@ def main(config: Config):
     train_loader, test_loader = load_mnist(config)
 
     # モデルの定義
-    model = models.Simple_CNN2()
+    model = models.CNN()
     model.to(config.device)
     print(model) if config.train_id == 0 else None
 
     # 損失関数と最適化手法の定義
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=config.lr)
+    scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.95)
 
     # 学習の実行
     train_losses = []
@@ -34,7 +35,7 @@ def main(config: Config):
 
     for epoch in range(config.epochs):
         train_loss, train_accuracy = run_epoch(
-            model, train_loader, criterion, optimizer, config
+            model, train_loader, criterion, optimizer, scheduler, config
         )
         test_loss, test_accuracy = evaluate(model, test_loader, criterion, config)
         print(

@@ -11,6 +11,7 @@ def run_epoch(
     train_loader: DataLoader,
     criterion: nn.Module,
     optimizer: optim.Optimizer,
+    scheduler: optim.lr_scheduler.LRScheduler,
     config: Config,
 ):
     model.train()  # モデルを学習モードに設定
@@ -30,6 +31,9 @@ def run_epoch(
         total_loss += loss.item()  # バッチの損失を累積
         pred = output.argmax(dim=1, keepdim=True)  # スコアが最大値のインデックスを取得
         correct += pred.eq(target.view_as(pred)).sum().item()  # 正解数をカウント
+
+    if config.enable_scheduler:
+        scheduler.step()
 
     avg_loss = total_loss / len(train_loader)  # バッチの数でわる
     accuracy = 100 * correct / len(train_loader.dataset)  # type: ignore  # サンプル数でわる

@@ -18,6 +18,7 @@ class Config:
         )
         self.train_id = 0
         self.train_count = int(env["train_count"] or "1")
+        self.enable_scheduler = env.get("enable_scheduler", "False") == "True"
 
     def next_training(self):
         self.train_id += 1
@@ -32,4 +33,6 @@ class Config:
             "device": str(self.device),
             "experiment_id": self.experiment_id,
             "train_id": self.train_id,
+            "train_count": self.train_count,
+            "enable_scheduler": self.enable_scheduler,
         }
