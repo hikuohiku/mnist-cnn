@@ -11,11 +11,20 @@ def run_epoch(
     optimizer: optim.Optimizer,
 ):
     model.train()  # モデルを学習モードに設定
+    total_loss = 0
+    correct = 0
     for data, target in tqdm(train_loader):
         optimizer.zero_grad()  # 勾配を初期化
         output = model(data)  # モデルにデータを入力
-        # print(output.shape)  # torch.Size([64, 10])
         loss = criterion(output, target)  # 損失を計算
-        # print(loss)  # tensor(2.1018, grad_fn=<NllLossBackward0>)
         loss.backward()  # 勾配を計算
         optimizer.step()  # パラメータを更新
+
+        total_loss += loss.item()  # バッチの損失を累積
+        pred = output.argmax(dim=1, keepdim=True)  # スコアが最大値のインデックスを取得
+        correct += pred.eq(target.view_as(pred)).sum().item()  # 正解数をカウント
+
+    avg_loss = total_loss / len(train_loader)  # バッチの数でわる
+    accuracy = 100 * correct / len(train_loader.dataset)  # type: ignore  # サンプル数でわる
+
+    return avg_loss, accuracy

@@ -4,6 +4,7 @@ from torch import nn, optim
 from eval import evaluate
 from load_dataset import load_mnist
 from models import MLP
+from plot import plot
 from train import run_epoch
 
 
@@ -28,14 +29,32 @@ def main(config: Config):
     optimizer = optim.SGD(model.parameters(), lr=config.lr)
 
     # 学習の実行
-    for _ in range(config.epochs):
-        run_epoch(model, train_loader, criterion, optimizer)
+    train_losses = []
+    train_accuracies = []
+    test_losses = []
+    test_accuracies = []
+    for epoch in range(config.epochs):
+        train_loss, train_accuracy = run_epoch(
+            model, train_loader, criterion, optimizer
+        )
         test_loss, test_accuracy = evaluate(model, test_loader, criterion)
         print(
-            "Test set: Average loss: {:.4f}, Accuracy: {:.2f}%".format(
-                test_loss, test_accuracy
+            "Epoch {}: Train set: Average loss: {:.4f}, Accuracy: {:.2f}%".format(
+                epoch + 1, train_loss, train_accuracy
             )
         )
+        print(
+            "Epoch {}: Test set: Average loss: {:.4f}, Accuracy: {:.2f}%".format(
+                epoch + 1, test_loss, test_accuracy
+            )
+        )
+        train_losses.append(train_loss)
+        train_accuracies.append(train_accuracy)
+        test_losses.append(test_loss)
+        test_accuracies.append(test_accuracy)
+
+    # 学習結果のプロット
+    plot(train_losses, test_losses, train_accuracies, test_accuracies, config)  # type: ignore
 
 
 if __name__ == "__main__":

@@ -14,3 +14,6 @@ data/
 
 # config
 .env
+
+# output
+loss_accuracy.svg
