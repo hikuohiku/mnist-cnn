@@ -3,6 +3,7 @@ from torch import nn, optim
 
 from load_dataset import load_mnist
 from models import MLP
+from train import run_epoch
 
 
 class Config:
@@ -10,6 +11,7 @@ class Config:
         self.batch_size = int(env["batch_size"] or "64")
         self.test_batch_size = int(env["test_batch_size"] or "32")
         self.lr = float(env["lr"] or "0.1")
+        self.epochs = int(env["epochs"] or "10")
 
 
 def main(config: Config):
@@ -24,8 +26,12 @@ def main(config: Config):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=config.lr)
 
+    # 学習の実行
+    for _ in range(config.epochs):
+        run_epoch(model, train_loader, criterion, optimizer)
+
 
 if __name__ == "__main__":
     env = dotenv_values(".env")
-    config = Config(env)
+    config: Config = Config(env)
     main(config)
