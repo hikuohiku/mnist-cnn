@@ -1,6 +1,7 @@
 from dotenv import dotenv_values
 
 from load_dataset import load_mnist
+from models import MLP
 
 
 class Config:
@@ -12,6 +13,10 @@ class Config:
 def main(config: Config):
     # MNISTデータセットをロード
     train_loader, test_loader = load_mnist(config)
+
+    # モデルの定義
+    model = MLP()
+    print(model)
 
 
 if __name__ == "__main__":
