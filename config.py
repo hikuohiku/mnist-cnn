@@ -1,3 +1,5 @@
+import datetime
+
 import torch
 from torch import cuda
 
@@ -11,3 +13,10 @@ class Config:
         self.use_cuda = env["use_cuda"] == "True"
         use_cuda = self.use_cuda and cuda.is_available()
         self.device = torch.device("cuda:0" if use_cuda else "cpu")
+        self.experiment_id = env.get(
+            "experiment_id", datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        )
+        self.train_id = 0
+
+    def next_training(self):
+        self.train_id += 1

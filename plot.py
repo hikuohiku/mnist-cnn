@@ -1,8 +1,12 @@
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 
+from config import Config
 
-def plot(train_losses, test_losses, train_accuracies, test_accuracies, config):
+
+def plot(train_losses, test_losses, train_accuracies, test_accuracies, config: Config):
     epochs = np.arange(1, config.epochs + 1)
 
     plt.figure(figsize=(12, 5))
@@ -24,5 +28,8 @@ def plot(train_losses, test_losses, train_accuracies, test_accuracies, config):
     plt.legend()
 
     plt.tight_layout()
-    plt.savefig("loss_accuracy.svg")
+    save_dir = os.path.join("results", config.experiment_id)
+    os.makedirs(save_dir, exist_ok=True)
+    path = os.path.join(save_dir, f"loss_accuracy_{config.train_id}.svg")
+    plt.savefig(path)
     plt.show()

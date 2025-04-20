@@ -59,6 +59,8 @@ def main(config: Config):
     # 学習結果のプロット
     plot(train_losses, test_losses, train_accuracies, test_accuracies, config)  # type: ignore
 
+    return train_losses[-1], test_losses[-1], train_accuracies[-1], test_accuracies[-1]
+
 
 if __name__ == "__main__":
     env = dotenv_values(".env")
