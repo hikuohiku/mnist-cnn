@@ -1,7 +1,6 @@
-import torch
-import torchvision
-import torchvision.transforms as transforms
 from dotenv import dotenv_values
+
+from load_dataset import load_mnist
 
 
 class Config:
@@ -11,27 +10,8 @@ class Config:
 
 
 def main(config: Config):
-    # MNISTデータセットをダウンロード
-    train_dataset = torchvision.datasets.MNIST(
-        root="./data", train=True, transform=transforms.ToTensor(), download=True
-    )
-    test_dataset = torchvision.datasets.MNIST(
-        root="./data", train=False, transform=transforms.ToTensor(), download=True
-    )
-    print(train_dataset)
-    print(test_dataset)
-    print(train_dataset[0][0].shape)
-    print(type(train_dataset[0][1]))
-
-    # データローダーを作成
-    train_loader = torch.utils.data.DataLoader(
-        dataset=train_dataset, batch_size=config.batch_size, shuffle=True
-    )
-    test_loader = torch.utils.data.DataLoader(
-        dataset=test_dataset, batch_size=config.test_batch_size, shuffle=False
-    )
-
-    print("MNISTデータセットをロードしました。")
+    # MNISTデータセットをロード
+    train_loader, test_loader = load_mnist(config)
 
 
 if __name__ == "__main__":
