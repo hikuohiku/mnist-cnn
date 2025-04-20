@@ -96,3 +96,78 @@ def save_config(config: Config):
     # configをJSONファイルに保存
     with open(config_path, "w") as jsonfile:
         json.dump(config.to_dict(), jsonfile, indent=4)
+
+
+def calculate_mean_and_variance(csv_path):
+    """
+    CSVファイルからtrain_loss, train_accuracy, test_loss, test_accuracyの平均と分散を計算する。
+    """
+    train_losses = []
+    train_accuracies = []
+    test_losses = []
+    test_accuracies = []
+
+    with open(csv_path, "r") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            train_losses.append(float(row["train_loss"]))
+            train_accuracies.append(float(row["train_accuracy"]))
+            test_losses.append(float(row["test_loss"]))
+            test_accuracies.append(float(row["test_accuracy"]))
+
+    train_losses_mean = np.mean(train_losses)
+    train_losses_variance = np.var(train_losses)
+    train_accuracies_mean = np.mean(train_accuracies)
+    train_accuracies_variance = np.var(train_accuracies)
+    test_losses_mean = np.mean(test_losses)
+    test_losses_variance = np.var(test_losses)
+    test_accuracies_mean = np.mean(test_accuracies)
+    test_accuracies_variance = np.var(test_accuracies)
+
+    return (
+        train_losses_mean,
+        train_losses_variance,
+        train_accuracies_mean,
+        train_accuracies_variance,
+        test_losses_mean,
+        test_losses_variance,
+        test_accuracies_mean,
+        test_accuracies_variance,
+    )
+
+
+def save_summary(config: Config):
+    save_dir = os.path.join("results", config.experiment_id)
+    os.makedirs(save_dir, exist_ok=True)
+    csv_path = os.path.join(save_dir, "result.csv")
+    (
+        train_losses_mean,
+        train_losses_variance,
+        train_accuracies_mean,
+        train_accuracies_variance,
+        test_losses_mean,
+        test_losses_variance,
+        test_accuracies_mean,
+        test_accuracies_variance,
+    ) = calculate_mean_and_variance(csv_path)
+
+    print(f"Train Loss Mean: {train_losses_mean}")
+    print(f"Train Loss Variance: {train_losses_variance}")
+    print(f"Train Accuracy Mean: {train_accuracies_mean}")
+    print(f"Train Accuracy Variance: {train_accuracies_variance}")
+    print(f"Test Loss Mean: {test_losses_mean}")
+    print(f"Test Loss Variance: {test_losses_variance}")
+    print(f"Test Accuracy Mean: {test_accuracies_mean}")
+    print(f"Test Accuracy Variance: {test_accuracies_variance}")
+
+    # 結果をファイルに保存
+    result_path = os.path.join("results", config.experiment_id, "summary.txt")
+    with open(result_path, "w") as f:
+        f.write(f"Train Loss Mean: {train_losses_mean}\n")
+        f.write(f"Train Loss Variance: {train_losses_variance}\n")
+        f.write(f"Train Accuracy Mean: {train_accuracies_mean}\n")
+        f.write(f"Train Accuracy Variance: {train_accuracies_variance}\n")
+        f.write(f"Test Loss Mean: {test_losses_mean}\n")
+        f.write(f"Test Loss Variance: {test_losses_variance}\n")
+        f.write(f"Test Accuracy Mean: {test_accuracies_mean}\n")
+        f.write(f"Test Accuracy Variance: {test_accuracies_variance}\n")

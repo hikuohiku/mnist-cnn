@@ -7,7 +7,7 @@ from config import Config
 from eval import evaluate
 from load_dataset import load_mnist
 from models import Simple_CNN
-from output import plot, save_config, save_results
+from output import plot, save_config, save_results, save_summary
 from train import run_epoch
 
 
@@ -79,3 +79,5 @@ if __name__ == "__main__":
         print(f"\n[Training {i + 1}]\n")
         main(config)
         config.next_training()
+    # 学習サマリーの保存
+    save_summary(config)
