@@ -14,6 +14,8 @@ def run_epoch(
     for data, target in tqdm(train_loader):
         optimizer.zero_grad()  # 勾配を初期化
         output = model(data)  # モデルにデータを入力
+        # print(output.shape)  # torch.Size([64, 10])
         loss = criterion(output, target)  # 損失を計算
+        # print(loss)  # tensor(2.1018, grad_fn=<NllLossBackward0>)
         loss.backward()  # 勾配を計算
         optimizer.step()  # パラメータを更新

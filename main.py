@@ -1,6 +1,7 @@
 from dotenv import dotenv_values
 from torch import nn, optim
 
+from eval import evaluate
 from load_dataset import load_mnist
 from models import MLP
 from train import run_epoch
@@ -29,6 +30,12 @@ def main(config: Config):
     # 学習の実行
     for _ in range(config.epochs):
         run_epoch(model, train_loader, criterion, optimizer)
+        test_loss, test_accuracy = evaluate(model, test_loader, criterion)
+        print(
+            "Test set: Average loss: {:.4f}, Accuracy: {:.2f}%".format(
+                test_loss, test_accuracy
+            )
+        )
 
 
 if __name__ == "__main__":
