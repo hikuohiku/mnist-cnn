@@ -1,3 +1,5 @@
+import time
+
 from dotenv import dotenv_values
 from torch import nn, optim
 
@@ -33,6 +35,9 @@ def main(config: Config):
     train_accuracies = []
     test_losses = []
     test_accuracies = []
+
+    start_time = time.time()
+
     for epoch in range(config.epochs):
         train_loss, train_accuracy = run_epoch(
             model, train_loader, criterion, optimizer
@@ -52,6 +57,10 @@ def main(config: Config):
         train_accuracies.append(train_accuracy)
         test_losses.append(test_loss)
         test_accuracies.append(test_accuracy)
+
+    end_time = time.time()
+    training_time = end_time - start_time
+    print("Training time: {:.2f} seconds".format(training_time))
 
     # 学習結果のプロット
     plot(train_losses, test_losses, train_accuracies, test_accuracies, config)  # type: ignore
