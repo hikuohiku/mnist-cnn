@@ -16,7 +16,7 @@ def main(config: Config):
     train_loader, test_loader = load_mnist(config)
 
     # モデルの定義
-    model = models.Complex_CNN()
+    model = models.Simple_CNN2()
     model.to(config.device)
     print(model) if config.train_id == 0 else None
 
