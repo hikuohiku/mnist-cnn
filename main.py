@@ -75,7 +75,7 @@ if __name__ == "__main__":
     env = dotenv_values(".env")
     config: Config = Config(env)
     print("Using device:", config.device)
-    for i in range(3):
+    for i in range(config.train_count):
         print(f"\n[Training {i + 1}]\n")
         main(config)
         config.next_training()
