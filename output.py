@@ -18,6 +18,7 @@ def plot(train_losses, test_losses, train_accuracies, test_accuracies, config: C
     plt.xlabel("Epochs")
     plt.ylabel("Loss")
     plt.title("Training and Test Loss")
+    plt.ylim(0, 1.5)
     plt.legend()
 
     plt.subplot(1, 2, 2)
@@ -26,6 +27,7 @@ def plot(train_losses, test_losses, train_accuracies, test_accuracies, config: C
     plt.xlabel("Epochs")
     plt.ylabel("Accuracy")
     plt.title("Training and Test Accuracy")
+    plt.ylim(75, 100)
     plt.legend()
 
     plt.tight_layout()
