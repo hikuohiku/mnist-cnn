@@ -3,19 +3,12 @@ import time
 from dotenv import dotenv_values
 from torch import nn, optim
 
+from config import Config
 from eval import evaluate
 from load_dataset import load_mnist
 from models import Simple_CNN
 from plot import plot
 from train import run_epoch
-
-
-class Config:
-    def __init__(self, env):
-        self.batch_size = int(env["batch_size"] or "64")
-        self.test_batch_size = int(env["test_batch_size"] or "32")
-        self.lr = float(env["lr"] or "0.1")
-        self.epochs = int(env["epochs"] or "10")
 
 
 def main(config: Config):
@@ -24,6 +17,7 @@ def main(config: Config):
 
     # モデルの定義
     model = Simple_CNN()
+    model.to(config.device)
     print(model)
 
     # 損失関数と最適化手法の定義
@@ -40,9 +34,9 @@ def main(config: Config):
 
     for epoch in range(config.epochs):
         train_loss, train_accuracy = run_epoch(
-            model, train_loader, criterion, optimizer
+            model, train_loader, criterion, optimizer, config
         )
-        test_loss, test_accuracy = evaluate(model, test_loader, criterion)
+        test_loss, test_accuracy = evaluate(model, test_loader, criterion, config)
         print(
             "Epoch {}: Train set: Average loss: {:.4f}, Accuracy: {:.2f}%".format(
                 epoch + 1, train_loss, train_accuracy
@@ -69,4 +63,5 @@ def main(config: Config):
 if __name__ == "__main__":
     env = dotenv_values(".env")
     config: Config = Config(env)
+    print("Using device:", config.device)
     main(config)

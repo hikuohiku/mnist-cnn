@@ -2,15 +2,21 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader
 
+from config import Config
+
 
 def evaluate(
-    model: nn.Module, test_loader: DataLoader, criterion: nn.Module
+    model: nn.Module, test_loader: DataLoader, criterion: nn.Module, config: Config
 ) -> tuple[float, float]:
     model.eval()  # モデルを評価モードに設定
     test_loss = 0
     correct = 0
     with torch.no_grad():  # 勾配計算を無効にする
         for data, target in test_loader:
+            data, target = (
+                data.to(config.device),
+                target.to(config.device),
+            )  # データとターゲットをデバイスに転送
             output = model(data)  # モデルにデータを入力
             test_loss += criterion(output, target).item()  # 損失を計算
             pred = output.argmax(
