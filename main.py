@@ -3,10 +3,10 @@ import time
 from dotenv import dotenv_values
 from torch import nn, optim
 
+import models
 from config import Config
 from eval import evaluate
 from load_dataset import load_mnist
-from models import Simple_CNN
 from output import plot, save_config, save_results, save_summary
 from train import run_epoch
 
@@ -16,7 +16,7 @@ def main(config: Config):
     train_loader, test_loader = load_mnist(config)
 
     # モデルの定義
-    model = Simple_CNN()
+    model = models.CNN()
     model.to(config.device)
     print(model) if config.train_id == 0 else None
 
