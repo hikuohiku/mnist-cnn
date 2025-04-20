@@ -20,3 +20,15 @@ class Config:
 
     def next_training(self):
         self.train_id += 1
+
+    def to_dict(self):
+        return {
+            "batch_size": self.batch_size,
+            "test_batch_size": self.test_batch_size,
+            "lr": self.lr,
+            "epochs": self.epochs,
+            "use_cuda": self.use_cuda,
+            "device": str(self.device),
+            "experiment_id": self.experiment_id,
+            "train_id": self.train_id,
+        }

@@ -7,7 +7,7 @@ from config import Config
 from eval import evaluate
 from load_dataset import load_mnist
 from models import Simple_CNN
-from plot import plot
+from output import plot, save_config, save_results
 from train import run_epoch
 
 
@@ -58,8 +58,17 @@ def main(config: Config):
 
     # 学習結果のプロット
     plot(train_losses, test_losses, train_accuracies, test_accuracies, config)  # type: ignore
-
-    return train_losses[-1], test_losses[-1], train_accuracies[-1], test_accuracies[-1]
+    # configの保存
+    save_config(config)
+    # 学習結果の保存
+    save_results(
+        train_losses,
+        test_losses,
+        train_accuracies,
+        test_accuracies,
+        training_time,
+        config,
+    )
 
 
 if __name__ == "__main__":
