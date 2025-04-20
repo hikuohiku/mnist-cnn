@@ -3,7 +3,7 @@ from torch import nn, optim
 
 from eval import evaluate
 from load_dataset import load_mnist
-from models import MLP
+from models import Simple_CNN
 from plot import plot
 from train import run_epoch
 
@@ -21,7 +21,7 @@ def main(config: Config):
     train_loader, test_loader = load_mnist(config)
 
     # モデルの定義
-    model = MLP()
+    model = Simple_CNN()
     print(model)
 
     # 損失関数と最適化手法の定義
