@@ -17,6 +17,7 @@ class Config:
             "experiment_id", datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
         )
         self.train_id = 0
+        self.train_count = int(env["train_count"] or "1")
 
     def next_training(self):
         self.train_id += 1

@@ -18,7 +18,7 @@ def main(config: Config):
     # モデルの定義
     model = Simple_CNN()
     model.to(config.device)
-    print(model)
+    print(model) if config.train_id == 0 else None
 
     # 損失関数と最適化手法の定義
     criterion = nn.CrossEntropyLoss()
@@ -75,4 +75,7 @@ if __name__ == "__main__":
     env = dotenv_values(".env")
     config: Config = Config(env)
     print("Using device:", config.device)
-    main(config)
+    for i in range(3):
+        print(f"\n[Training {i + 1}]\n")
+        main(config)
+        config.next_training()
